@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta charset='UTF-8'>
+<html>
+  <head>
+    <title>顯示檔案和圖片</title>
+  </head>
+  <body>
+    <h1>顯示檔案和圖片</h1>
+
+    <h2>顯示TXT檔案內容</h2>
+    <form>
+      <label for="txt-file-name">請輸入TXT檔案名稱:</label>
+      <input type="text" id="txt-file-name" name="txt-file-name"><br><br>
+      <input type="button" value="顯示檔案內容" onclick="showFileContent()">
+    </form>
+    <br>
+    <div id="txt-file-content"></div>
+
+    <h2>顯示圖片並設計刷新按鈕</h2>
+    <form>
+      <label for="img-file-name">請輸入圖片檔案名稱:</label>
+      <input type="text" id="img-file-name" name="img-file-name"><br><br>
+      <input type="button" value="顯示圖片" onclick="showImage()">
+    </form>
+    <br>
+    <div id="image-container"></div>
+
+    <script>
+      function showFileContent() {
+        var fileName = document.getElementById("txt-file-name").value;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("txt-file-content").innerHTML = this.responseText;
+          }
+        };
+        xhttp.open("GET", fileName, true);
+        xhttp.send();
+      }
+
+      function showImage() {
+        var fileName = document.getElementById("img-file-name").value;
+        var image = new Image();
+        image.src = fileName;
+        image.onload = function() {
+          var container = document.getElementById("image-container");
+          container.innerHTML = "";
+          container.appendChild(image);
+          var refreshButton = document.createElement("button");
+          refreshButton.innerHTML = "刷新";
+          refreshButton.onclick = function() {
+            image.src = fileName + "?t=" + new Date().getTime();
+          };
+          container.appendChild(refreshButton);
+        };
+      }
+    </script>
+  </body>
+</html>
